@@ -21,7 +21,7 @@
             var shape = new Konva.Group({
                 x: config.x,
                 y: config.y,
-                rotation: 10
+                rotation: 0
             });
 
             var face = new Konva.Circle({
@@ -41,7 +41,7 @@
                 fill: '#0ff',
                 stroke: 'black',
                 strokeWidth: .5,
-                rotation: -30
+                rotation: 60
             });
 
             var shield = new Konva.Line({
@@ -50,7 +50,7 @@
                 stroke: 'black',
                 strokeWidth: .5,
                 closed : true,
-                rotationDeg: -165
+                rotationDeg: -75
             });
 
             // var sword = new Konva.Line({
@@ -68,8 +68,8 @@
                 stroke: 'black',
                 strokeWidth: .5,
                 closed : true,
-                scaleY : 2,
-                y : -9
+                scaleX : 2,
+                x : 9
             });
 
             var wield = new Konva.Arc({
@@ -92,7 +92,7 @@
 
 
             var prope={
-                speed:10,
+                speed:50,
                 angSp:180,
                 blood:20
             }
@@ -107,12 +107,25 @@
             var funcs={
                 move:function(set){actio.move=set},
                 rote:function(set){actio.rote=set},
-                swip:function(set){if(actio.swip=300){actio.swip=0}},
-                chop:function(set){if(actio.chop=200){actio.chop=0}}
+                // swip:function(set){if(actio.swip=300){actio.swip=0}},
+                chop:function(set){if(actio.chop==200){actio.chop=0}}
             }
 
             var opera=function(){
-                if(actio.move==1){shape.move({x:.1,y:0})}
+                if(actio.move==1){
+                    var diam=shape.attrs.rotation*Math.PI/180
+                    shape.move({
+                        x:Math.cos(diam)*prope.speed/100,
+                        y:Math.sin(diam)*prope.speed/100
+                    })
+                }
+                if(actio.move==-1){
+                    var diam=shape.attrs.rotation*Math.PI/180
+                    shape.move({
+                        x:-0.5*Math.cos(diam)*prope.speed/100,
+                        y:-0.5*Math.sin(diam)*prope.speed/100
+                    })
+                }
 
                 if(actio.rote!=0){shape.rotate(actio.rote*prope.angSp/100)}
 
@@ -133,24 +146,24 @@
                 if(actio.chop<200){
                     actio.chop+=1
                     if(actio.chop<20){
-                        sword.scaleY(sword.attrs.scaleY+1./20)
-                        sword.move({x:0,y:6/20})
+                        sword.scaleX(sword.attrs.scaleX+1./20)
+                        sword.move({x:-6/20,y:0})
                     }
                     else if(actio.chop<30){
-                        sword.scaleY(sword.attrs.scaleY-1./10)
-                        sword.move({x:0,y:-6/10})
+                        sword.scaleX(sword.attrs.scaleX-1./10)
+                        sword.move({x:6/10,y:0})
                     }
                     else if(actio.chop<40){
-                        sword.scaleY(sword.attrs.scaleY+3./10)
-                        sword.move({x:0,y:-6/10})
+                        sword.scaleX(sword.attrs.scaleX+3./10)
+                        sword.move({x:6/10,y:0})
                     }
                     else if(actio.chop<100){
-                        sword.scaleY(sword.attrs.scaleY-3./60)
-                        sword.move({x:0,y:6/60})
+                        sword.scaleX(sword.attrs.scaleX-3./60)
+                        sword.move({x:-6/60,y:0})
                     }
                     else{
-                        sword.scaleY(2),
-                        sword.y(-9)
+                        sword.scaleX(2),
+                        sword.x(9)
                     }   
                 }
             }
@@ -160,7 +173,67 @@
                 actio:actio,
                 funcs:funcs,
                 opera:opera
+            }
+        },
+        flag:[
+            ['a',0],
+            ['b',0],
+            ['c',0],
+            ['d',0],
+            ['e',0],
+            ['f',0],
+            ['g',0],
+            ['h',0],
+            ['i',0],
+            ['j',0],
+            ['k',0],
+            ['l',0],
+            ['m',0],
+            ['n',0],
+            ['o',0],
+            ['p',0],
+            ['q',0],
+            ['r',0],
+            ['s',0],
+            ['t',0],
+            ['u',0],
+            ['v',0],
+            ['w',0],
+            ['x',0],
+            ['y',0],
+            ['z',0],
+            [' ',0]],
+
+
+        sign:function(letter){
+            for(var i=0;i<27;i++){
+                if(CoS.flag[i][0]==letter){
+                    return CoS.flag[i][1] 
+                }
             }   
+        },
+               
+        wave:function(){
+            console.log('wave')
+            document.addEventListener('keydown',function(e){
+                // console.log(e.key)
+                for(var i=0;i<27;i++){
+                    if(CoS.flag[i][0]==e.key){
+                        // console.log(i)
+
+                        CoS.flag[i][1]=1
+                        // console.log(CoS.flag[i])
+                    }
+                }
+            })
+            document.addEventListener('keyup',function(e){
+                for(var i=0;i<27;i++){
+                    if(CoS.flag[i][0]==e.key){
+                        CoS.flag[i][1]=0
+                        // console.log(CoS.flag[i])
+                    }
+                }
+            })
         }
     }
 
@@ -184,23 +257,68 @@
 
 
 
-    layer1.add(w1.shape)
     layer1.add(w2.shape)
+    layer1.add(w1.shape)
 
     // w1.move({x:10})
-    // w1.rotate(90)
+    w2.shape.rotate(180)
 
     stage.add(layer1);
 
-    stage.scale({x: 2, y: 2})
+    stage.scale({x: 1, y: 1})
     stage.batchDraw();
 
     w1.opera()
     t=0
-    // w1.funcs.swip(1)
+
+    console.log(CoS.wave())
+    CoS.flag[0][1]=1
+    console.log(CoS.flag[0])
     // w1.funcs.rote(1)
+    // w1.funcs.move(1)
+    // w2.funcs.move(-1)
     // setInterval('t+=1;if(w1.actio.swip==300){w1.funcs.swip()};w1.opera();stage.batchDraw();',10)
-    setInterval('t+=1;if(w1.actio.chop==200){w1.funcs.chop()};w1.opera();stage.batchDraw();',10)
+    // setInterval('t+=1;if(w1.actio.chop==200){w1.funcs.chop()};w1.opera();w2.opera();stage.batchDraw();',10)
+    setInterval('t+=1;w1.opera();w2.opera();stage.batchDraw();console.log(CoS.sign("a"));',10)
+    // console.log(CoS.banner().sign("a"));
+
+
+
+    document.addEventListener('keydown',function(e){
+        switch(e.key) {
+            case ' ':
+                w1.funcs.chop()
+                break;
+            case 'w':
+                w1.funcs.move(1)
+                break; 
+            case 's':
+                w1.funcs.move(-1)
+                break; 
+            case 'd':
+                w1.funcs.rote(1)
+                break; 
+            case 'a':
+                w1.funcs.rote(-1)
+                break;          
+        }
+    })
+    document.addEventListener('keyup',function(e){
+        switch(e.key) {
+            case 'w':
+                w1.funcs.move(0)
+                break;  
+            case 's':
+                w1.funcs.move(0)
+                break; 
+            case 'd':
+                w1.funcs.rote(0)
+                break; 
+            case 'a':
+                w1.funcs.rote(0)
+                break;
+        }
+    })
 
   </script>
 </body>
