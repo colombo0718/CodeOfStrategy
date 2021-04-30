@@ -27,74 +27,87 @@
             var face = new Konva.Circle({
                 x: 0,
                 y: 0,
-                radius: 2.5,
-                fill: '#44f',
+                radius: 5,
+                fill: 'pink',
                 stroke: 'black',
-                strokeWidth: 0.2
+                strokeWidth: 0.5
             });
 
-            var swep_reg = new Konva.Wedge({
+            var helmet = new Konva.Wedge({
                 x: 0,
                 y: 0,
-                radius: 10,
-                angle: 90,
-                fill: '#fff',
+                radius: 5,
+                angle: 240,
+                fill: '#0ff',
                 stroke: 'black',
-                strokeWidth: .2,
-                rotation: -45,
-                opacity: 0.5
+                strokeWidth: .5,
+                rotation: 60
             });
 
-            var swep_rat = new Konva.Wedge({
-                x: 0,
-                y: 0,
-                radius: 10,
-                angle: 90,
-                fill: '#f0f',
+            var shield = new Konva.Line({
+                points: [7,3,  9,3, 9,-3,  7,-3],
+                fill: 'chocolate',
                 stroke: 'black',
-                strokeWidth: .2,
-                rotation: -45,
-                opacity: 0.5
-            });
-
-            var sword = new Konva.Line({
-                points: [0,-1, 2,0, 0,1, -2,0],
-                fill: '#888',
-                stroke: 'black',
-                strokeWidth: .2,
+                strokeWidth: .5,
                 closed : true,
-                scaleX : 1,
-                x : 5
+                rotationDeg: -75
             });
 
+            // var sword = new Konva.Line({
+            //     points: [7,0,  11,-1, 15,0,  11,+1],
+            //     fill: '#999',
+            //     stroke: 'black',
+            //     strokeWidth: .5,
+            //     closed : true,
+            //     rotation: -90
+            // });
+            var sword = new Konva.Line({
+                points: [0,-1, 1,0, 0,1, -1,0],
+                // points: [0,-10, 1,-15, 0,-20, -1,-15],
+                fill: '#999',
+                stroke: 'black',
+                strokeWidth: .5,
+                closed : true,
+                scaleX : 2,
+                x : 9
+            });
 
-            shape.add(swep_reg)
-            shape.add(swep_rat)
+            var wield = new Konva.Arc({
+                innerRadius:  15,
+                outerRadius: 16,
+                angle: 150,
+                fill: '#faa',
+                stroke: '#f00',
+                strokeWidth: .1 ,
+                rotation: -150,
+                visible:false
+            })
+
             shape.add(face)
-            
-            // shape.add(shield)
-            // shape.add(wield)
+            shape.add(helmet)
+            shape.add(shield)
+            shape.add(wield)
             shape.add(sword)
 
 
 
             var prope={
                 speed:50,
-                angSp:135,
+                angSp:180,
                 blood:20
             }
 
             var actio={
                 move:0,
                 rote:0,
-                swep:20,
+                swip:300,
                 chop:200
             }
 
             var funcs={
                 move:function(set){actio.move=set},
                 rote:function(set){actio.rote=set},
-                swep:function(set){if(actio.swep=20){actio.swep=0}},
+                // swip:function(set){if(actio.swip=300){actio.swip=0}},
                 chop:function(set){if(actio.chop==200){actio.chop=0}}
             }
 
@@ -116,27 +129,19 @@
 
                 if(actio.rote!=0){shape.rotate(actio.rote*prope.angSp/100)}
 
-                if(actio.swep<=30){
-                    actio.swep+=1
-                    // if(actio.swep<=20){
-                    //     swep_reg.visible(true)
-                    //     swep_rat.visible(true)
-                    //     swep_rat.attrs.radius=actio.swep*10/20
-                    // }
-                    // if(actio.swep>20){
-                    //     swep_reg.visible(false)
-                    //     swep_rat.visible(false)
-                    // }  
-                    if(actio.swep<=20){
-                        swep_reg.visible(true)
-                        swep_rat.visible(true)
-                        swep_rat.attrs.angle=actio.swep*90/20
-                    }
-                    if(actio.swep>20){
-                        swep_reg.visible(false)
-                        swep_rat.visible(false)
-                    }  
-                }
+                // if(actio.swip<300){
+                //     actio.swip+=1
+                //     if(actio.swip<20){sword.rotate(-60./20)}
+                //     else if(actio.swip<30){
+                //         sword.rotate(150./10)
+                //         wield.visible(true)
+                //     }
+                //     else if(actio.swip<100){
+                //         sword.rotate(-90./70)
+                //         wield.visible(false)
+                //     }
+                //     else{sword.rotation(-90)}   
+                // }
 
                 if(actio.chop<200){
                     actio.chop+=1
@@ -256,11 +261,11 @@
     layer1.add(w1.shape)
 
     // w1.move({x:10})
-    // w2.shape.rotate(180)
+    w2.shape.rotate(180)
 
     stage.add(layer1);
 
-    stage.scale({x: 4, y: 4})
+    stage.scale({x: 1, y: 1})
     stage.batchDraw();
 
     w1.opera()
@@ -274,7 +279,7 @@
     // w2.funcs.move(-1)
     // setInterval('t+=1;if(w1.actio.swip==300){w1.funcs.swip()};w1.opera();stage.batchDraw();',10)
     // setInterval('t+=1;if(w1.actio.chop==200){w1.funcs.chop()};w1.opera();w2.opera();stage.batchDraw();',10)
-    setInterval('t+=1;w1.opera();w2.opera();stage.batchDraw();',10)
+    setInterval('t+=1;w1.opera();w2.opera();stage.batchDraw();console.log(CoS.sign("a"));',10)
     // console.log(CoS.banner().sign("a"));
 
 
@@ -282,7 +287,7 @@
     document.addEventListener('keydown',function(e){
         switch(e.key) {
             case ' ':
-                w1.funcs.swep()
+                w1.funcs.chop()
                 break;
             case 'w':
                 w1.funcs.move(1)
