@@ -28,59 +28,46 @@
                 x: 0,
                 y: 0,
                 radius: 2.5,
-                fill: '#44f',
+                fill: '#4ff',
                 stroke: 'black',
                 strokeWidth: 0.2
             });
 
-            var swep_reg = new Konva.Wedge({
-                x: 0,
-                y: 0,
-                radius: 10,
-                angle: 90,
-                fill: '#fff',
-                stroke: 'black',
-                strokeWidth: .2,
-                rotation: -45,
-                opacity: 0.5
-            });
 
             var swep_rat = new Konva.Wedge({
                 x: 0,
                 y: 0,
                 radius: 10,
                 angle: 90,
-                fill: '#f0f',
+                fill: '#ff0',
                 stroke: 'black',
                 strokeWidth: .2,
                 rotation: -45,
-                opacity: 0.5
+                opacity: 1,
+                visible:false
             });
 
             var sword = new Konva.Line({
-                points: [0,-1, 2,0, 0,1, -2,0],
-                fill: '#888',
+                points: [0,-1, 2,0, 0,1, -1,0],
+                fill: '#fff',
                 stroke: 'black',
                 strokeWidth: .2,
                 closed : true,
                 scaleX : 1,
-                x : 5
+                x : 2.5
             });
 
 
-            shape.add(swep_reg)
             shape.add(swep_rat)
             shape.add(face)
             
-            // shape.add(shield)
-            // shape.add(wield)
             shape.add(sword)
 
 
 
             var prope={
-                speed:50,
-                angSp:135,
+                speed:50*2,
+                angSp:135*2,
                 blood:20
             }
 
@@ -94,7 +81,7 @@
             var funcs={
                 move:function(set){actio.move=set},
                 rote:function(set){actio.rote=set},
-                swep:function(set){if(actio.swep=20){actio.swep=0}},
+                swep:function(set){console.log(actio.swep);if(actio.swep==20){console.log('aaaa');actio.swep=0}},
                 chop:function(set){if(actio.chop==200){actio.chop=0}}
             }
 
@@ -116,7 +103,8 @@
 
                 if(actio.rote!=0){shape.rotate(actio.rote*prope.angSp/100)}
 
-                if(actio.swep<=30){
+                if(actio.swep<20){
+                    console.log(actio.swep)
                     actio.swep+=1
                     // if(actio.swep<=20){
                     //     swep_reg.visible(true)
@@ -127,15 +115,14 @@
                     //     swep_reg.visible(false)
                     //     swep_rat.visible(false)
                     // }  
-                    if(actio.swep<=20){
-                        swep_reg.visible(true)
+                    if(actio.swep<=10){
                         swep_rat.visible(true)
-                        swep_rat.attrs.angle=actio.swep*90/20
-                    }
-                    if(actio.swep>20){
-                        swep_reg.visible(false)
+                        // swep_rat.attrs.angle=actio.swep*90/10
+                    }else if(10<actio.swep && actio.swep<20){
+                        swep_rat.visible(true)
+                    }else if(actio.swep==20){
                         swep_rat.visible(false)
-                    }  
+                    } 
                 }
 
                 if(actio.chop<200){
@@ -250,17 +237,67 @@
 
     var layer1 = new Konva.Layer();
 
+    var rect1 = new Konva.Rect({
+        x: 20,
+        y: 20,
+        width: 10,
+        height: 10,
+        fill: '#00f',
+        stroke: 'black',
+        strokeWidth: .2,
+    });
+    var rect2 = new Konva.Rect({
+        x: 30,
+        y: 20,
+        width: 10,
+        height: 10,
+        fill: '#0f0',
+        stroke: 'black',
+        strokeWidth: .2,
+    });
+    var rect3 = new Konva.Rect({
+        x: 40,
+        y: 20,
+        width: 10,
+        height: 10,
+        fill: '#444',
+        stroke: 'black',
+        strokeWidth: .2,
+    });
+    var rect4 = new Konva.Rect({
+        x: 50,
+        y: 20,
+        width: 10,
+        height: 10,
+        fill: '#840',
+        stroke: 'black',
+        strokeWidth: .2,
+    });
+    var rect5 = new Konva.Rect({
+        x: 60,
+        y: 20,
+        width: 10,
+        height: 10,
+        fill: '#fff',
+        stroke: 'black',
+        strokeWidth: .2,
+    });
 
-
+    layer1.add(rect1)
+    layer1.add(rect2)
+    layer1.add(rect3)
+    layer1.add(rect4)
+    layer1.add(rect5)
     layer1.add(w2.shape)
     layer1.add(w1.shape)
+
 
     // w1.move({x:10})
     // w2.shape.rotate(180)
 
     stage.add(layer1);
 
-    stage.scale({x: 4, y: 4})
+    stage.scale({x: 5, y: 5})
     stage.batchDraw();
 
     w1.opera()
@@ -274,7 +311,7 @@
     // w2.funcs.move(-1)
     // setInterval('t+=1;if(w1.actio.swip==300){w1.funcs.swip()};w1.opera();stage.batchDraw();',10)
     // setInterval('t+=1;if(w1.actio.chop==200){w1.funcs.chop()};w1.opera();w2.opera();stage.batchDraw();',10)
-    setInterval('t+=1;w1.opera();w2.opera();stage.batchDraw();',10)
+    setInterval('t+=1;w1.opera();w2.opera();stage.batchDraw();',20)
     // console.log(CoS.banner().sign("a"));
 
 
@@ -282,6 +319,7 @@
     document.addEventListener('keydown',function(e){
         switch(e.key) {
             case ' ':
+                console.log('fdsa')
                 w1.funcs.swep()
                 break;
             case 'w':
